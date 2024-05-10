@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header><h1>To Do List</h1></header>
+        
+        <div class="main-info">
+            <h3 id="projectHeading">Add a project!</h3>
+
+            <!-- <button class="task-button">Add Task <img src="./img/icon/square-plus.svg" alt="" class="add-button-img" id="addIcon"></button>
+
+            <div class="project-task">
+                <div class="task-main">
+                    <span>Do something!</span>
+                    <div>
+                        <span>Due: 11/05/2001</span>
+                        <img src="./img/icon/edit.svg" alt="" id="editIcon">
+                        <img src="./img/icon/close.svg" alt="" id="closeIcon">
+                    </div>
+                </div>
+                <div class="project-details">
+                    <p>These are the details!</p>
+                </div>
+
+                
+            </div> -->
+
+            
+            
+        </div>
+       
+        <div class="side-controls">
+            <h4>Projects</h4>
+            <button class="add-button">Add Project <img src="./img/icon/square-plus.svg" alt="" class="add-button-img add-project-img" id="addIcon"></button>
+
+            <!-- <button class="project-buttons">Project 1</button>
+            <button class="project-buttons">Project 2</button>
+            <button class="project-buttons">Project 3</button> -->
+
+        </div>
+    </div>
+    
+    <dialog id="projectDialog">
+        <form>
+            <div class="project-input-field">
+                <label for="project-title">Project Title:</label>
+                <input autofocus type="text" name="project-title" id="project-title" required>
+            </div>
+            <div class="form-buttons-div">
+                <button class="form-buttons" id="projectSubmitBtn">Submit</button>
+                <button class="form-buttons" id="projectCancelBtn">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="taskDialog">
+        <form>
+            <div class="task-inputs">
+                <div>
+                    <label for="task-title">Task:</label>
+                    <input autofocus type="text" name="task-title" id="task-title" required>
+                </div>
+                <div>
+                    <label for="task-detail">Details:</label>
+                    <textarea type="text" name="task-detail" id="task-detail"></textarea>
+                </div>
+                <div>
+                    <label for="task-date">Due Date:</label>
+                    <input type="date" name="task-date" id="task-date">
+                </div>
+            </div>
+            <div class="task-form-buttons">
+                <button class="form-buttons" id="taskSubmitBtn">Submit</button>
+                <button class="form-buttons" id="taskCancelBtn">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+</body>
+</html>

@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+**, **::before, **::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --dark-stone: #262626;
+    --stone: #262626;
+    --light-stone: #525252;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat", sans-serif;
+    background-color: white;
+    color: white;
+    width: 100vw;
+    height: 100vh;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin-right: auto;
+    margin-left: auto;
+    gap: 30px;
+}
+
+header {
+    color: white;
+    background-color: var(--stone);
+    grid-column: 1 / -1;
+    text-align: center;
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.5);
+    
+}
+
+header > h1 {
+    font-weight: 500;
+    letter-spacing: 1.5px;
+}
+
+.main-info {
+    display: flex;
+    flex-direction: column;
+    grid-column: 2 / -1;
+    background-color: var(--stone);
+    padding: 30px;
+    min-height: 500px;
+    margin-right: 100px;
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+.project-task {
+    padding: 20px;
+    background-color: white;
+    color: black;
+    margin-top: 20px;
+    border-radius: 10px;
+    
+}
+
+.task-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height:25px;
+    border-bottom: 1px solid black;
+}
+
+.task-main > div {
+    display: flex;
+    align-items: center;
+}
+
+.task-main > div > * {
+   margin-left: 15px;
+   text-align: center;
+}
+
+.side-controls {
+    display: flex;
+    flex-direction: column;
+   
+    align-items: center;
+    grid-row: 2 / 3;
+    background-color: var(--stone);
+    padding: 15px;
+    margin-left: 100px;
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+img {
+    width: 20px;
+    height: auto;
+    
+}
+
+img:hover {
+    cursor: pointer;
+    filter: brightness(85%);
+}
+
+.side-controls > h4 {
+    padding: 0;
+}
+
+button {
+    border: none;
+    padding: 15px 30px;
+    background-color: var(--light-stone);
+    color: white;
+}
+
+button:hover {
+    cursor: pointer;
+    filter: brightness(85%);
+}
+
+.add-button {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    
+    
+}
+
+.add-button-img {
+    width: 15px;
+    height: auto;
+    filter: invert(1);
+    margin-left: 10px;
+}
+
+.project-buttons {
+    margin-bottom: 20px;
+    background-color: white;
+    color: black;
+    width: 200px;
+}
+
+.task-button {
+    display: flex;
+    width: 150px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.project-task:hover {
+    cursor: pointer;
+}
+
+#projectDialog {
+    border: none;
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+#projectDialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.project-input-field {
+    margin-bottom: 20px;
+}
+
+.project-input-field > input {
+    height: 30px;
+    width: 300px;
+}
+
+.form-buttons-div {
+    display: flex;
+}
+
+.form-buttons-div > * {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#taskDialog {
+    width: 300px;
+    border: none;
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+.task-inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-inputs > * {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.task-inputs > div > input {
+    height: 30px;
+    width: 250px;
+    margin-top: 10px;
+}
+
+.task-inputs > div > textarea {
+    width: 250px;
+    margin-top: 10px;
+}
+
+#task-detail {
+    height: 100px;
+}
+
+.task-form-buttons {
+    display: flex;
+    margin-top: 10px;
+}
+
+.task-form-buttons > * {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.hidden-details {
+    display: none;
+}
