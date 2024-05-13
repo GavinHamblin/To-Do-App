@@ -3,12 +3,15 @@ import editIconIM from "./img/icon/edit.svg"
 
 
 const mainInfoDiv = document.querySelector('.main-info')
+const taskContainer = document.querySelector('.task-container')
+
 
 
 
 export default function addTaskToDom(a) {
     const projectTaskDiv = document.createElement('div')
     projectTaskDiv.classList.add('project-task')
+    
 
     const mainTaskDiv = document.createElement('div')
     mainTaskDiv.classList.add('task-main')
@@ -34,13 +37,13 @@ export default function addTaskToDom(a) {
     detail.classList.add('hidden-details')
     detail.innerHTML = `${a.details}`
 
+
     let clicked = false
     projectTaskDiv.addEventListener('click', () => {
         
         if (!clicked) {
             detail.style.display = 'block'
             clicked = true
-            console.log(clicked)
         } else {
             detail.style.display = 'none'
             clicked = false
@@ -50,7 +53,7 @@ export default function addTaskToDom(a) {
 
     
 
-    mainInfoDiv.appendChild(projectTaskDiv)
+    taskContainer.appendChild(projectTaskDiv)
     projectTaskDiv.appendChild(mainTaskDiv)
     mainTaskDiv.appendChild(taskTitle)
     mainTaskDiv.appendChild(notherDiv)
@@ -60,6 +63,7 @@ export default function addTaskToDom(a) {
     projectTaskDiv.appendChild(detail)
 
     deleteButton.addEventListener('click', () => {
-        mainInfoDiv.removeChild(projectTaskDiv)
+        taskContainer.removeChild(projectTaskDiv)
     })
 }
+
