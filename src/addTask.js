@@ -1,5 +1,6 @@
 import closeIconIM from "./img/icon/close.svg" 
 import editIconIM from "./img/icon/edit.svg"
+import saveAndRender from "./index"
 
 
 const mainInfoDiv = document.querySelector('.main-info')
@@ -8,7 +9,11 @@ const taskContainer = document.querySelector('.task-container')
 
 
 
-export default function addTaskToDom(a) {
+export default function addTaskToDom(a, b, selectedProject) {
+    
+    if (a.projectId !== b) {
+        return
+    }
     const projectTaskDiv = document.createElement('div')
     projectTaskDiv.classList.add('project-task')
     
@@ -17,7 +22,7 @@ export default function addTaskToDom(a) {
     mainTaskDiv.classList.add('task-main')
 
     const taskTitle = document.createElement('span')
-    taskTitle.innerHTML = `${a.title}`
+    taskTitle.innerHTML = `${a.name}`
 
     const notherDiv = document.createElement('div')
 
@@ -35,7 +40,7 @@ export default function addTaskToDom(a) {
 
     const detail = document.createElement('p')
     detail.classList.add('hidden-details')
-    detail.innerHTML = `${a.details}`
+    detail.innerHTML = `${a.detail}`
 
 
     let clicked = false
@@ -62,8 +67,16 @@ export default function addTaskToDom(a) {
     notherDiv.appendChild(deleteButton)
     projectTaskDiv.appendChild(detail)
 
+    
     deleteButton.addEventListener('click', () => {
-        taskContainer.removeChild(projectTaskDiv)
-    })
+        const taskIndex = selectedProject.tasks.findIndex(task => task.id === a.id)
+        if (taskIndex > -1) {
+            selectedProject.tasks.splice(taskIndex, 1)
+            saveAndRender()
+            rebuildTasks()
+        }
+        
+       
+})
 }
 

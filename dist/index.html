@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To Do List</title>
     <link rel="stylesheet" href="style.css">
-<script defer src="main23f860fff9225b36a024.js"></script></head>
+<script defer src="mainc48ebc2c032897c4730d.js"></script></head>
 <body>
     <div class="container">
         <header><h1>To Do List</h1></header>
         
         <div class="main-info">
             <h3 id="projectHeading">Add a project!</h3>
+
+            <div class="task-button-container"></div>
 
             <div class="task-container">
                 
@@ -41,7 +43,7 @@
         <div class="side-controls">
             <h4>Projects</h4>
             <button class="add-button">Add Project <img src="./img/icon/square-plus.svg" alt="" class="add-button-img add-project-img" id="addIcon"></button>
-
+            <div class="projects-div" data-projects></div>
           
         </div>
     </div>
@@ -60,7 +62,7 @@
     </dialog>
 
     <dialog id="taskDialog">
-        <form>
+        <form id="taskForm">
             <div class="task-inputs">
                 <div>
                     <label for="task-title">Task:</label>

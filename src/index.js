@@ -9,6 +9,7 @@ import addProject from './addProject'
 import addTaskToDom from './addTask'
 
 
+
 //selectors
 
 const closeIcon = document.querySelector('#closeIcon')
@@ -23,16 +24,21 @@ addProjectIcon.src = addIconIM
 
 const projectDialog = document.querySelector('#projectDialog')
 const taskDialog = document.querySelector('#taskDialog')
+const taskForm = document.querySelector('#taskForm')
 
 const taskTitle = document.querySelector('#task-title')
 const taskDetail = document.querySelector('#task-detail')
 const taskDate = document.querySelector('#task-date')
 const taskContainer = document.querySelector('.task-container')
 
+
+   
+
 const addProjectBtn = document.querySelector('.add-button')
 const projectSubmitBtn = document.querySelector('#projectSubmitBtn')
 const projectCancelBtn = document.querySelector('#projectCancelBtn')
-const sideControls = document.querySelector('[data-projects]')
+const projectsDiv = document.querySelector('[data-projects]')
+const projectHeading = document.querySelector('#projectHeading')
 
 const taskSubmitBtn = document.querySelector('#taskSubmitBtn')
 const taskCancelBtn = document.querySelector('#taskCancelBtn')
@@ -41,115 +47,148 @@ const projectTitle = document.querySelector('#project-title')
 const projectBtn = document.querySelectorAll('.project-buttons')
 
 
+const LOCAL_STORAGE_LIST_KEY = 'project.list'
+const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'project.selectedListId'
+// JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || 
 
-//global variables
 let projectList = []
 
+let selectedProject = null
 
-//event listeners
+let selectedListID = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY)
 
-    //add project event
-addProjectBtn.addEventListener('click', () => {
-    projectDialog.showModal();
-    
+
+function rebuildTasks() {
+    selectedProject = projectList.find(list => list.id === selectedListID)
+
+    if (selectedProject) {
+        selectedProject.tasks.forEach(task => {
+            addTaskToDom(task, selectedListID)
+        })
+    }
+}
+
+
+projectsDiv.addEventListener('click', (e) => {
+    console.log(projectList)
+    if (e.target.tagName.toLowerCase() === 'button') {
+        projectHeading.innerHTML = e.target.innerHTML
+        selectedListID = e.target.dataset.listID
+        selectedProject = projectList.find(list => list.id === selectedListID)
+        clearElement(taskContainer)
+        addProject(projectList)
+        
+        saveAndRender()
+        rebuildTasks()
+    }
 })
 
-    // submit project form
-projectSubmitBtn.addEventListener('click', (event) => {
-    event.preventDefault()
 
-    
+addProjectBtn.addEventListener('click', () => {
+    projectDialog.showModal()
+})
 
-    const newProject = createList(projectTitle.value)
+projectSubmitBtn.addEventListener('click', e => {
+    e.preventDefault()
+    const projectName = projectTitle.value
+
+    const newProject = createProjectList(projectName)
+
     projectList.push(newProject)
-
-    addProjectTab(newProject)
+    saveAndRender()
     projectDialog.close()
 })
 
-function createList(name) {
-    return {id: Date.now().toString(), name: name, tasks: []}
+function createProjectList(name) {
+    return {id:  Date.now().toString(), name: name, tasks: []}
 }
 
-    //cancel project form
-projectCancelBtn.addEventListener('click', (event) => {
-    event.preventDefault()
-    projectDialog.close();
-})
-
-    //submit task form
-    
-    
-    //cancel task form
-taskCancelBtn.addEventListener('click', (event) => {
-    event.preventDefault()
-    taskDialog.close();
-})
-
-
-
-sideControls.addEventListener('click', e => {
-    if (e.target.tagName.toLowerCase() === 'button') {
-        // selectedListID = e.target.dataset.listID
-        console.log(projectList.title)
-        addProject(projectList)
-    }
-})
-
-function addProjectTab(a) {
-    const projectButton = document.createElement('button')
-    projectButton.classList.add('project-buttons')
-
-    projectButton.innerHTML = `${a.title}`
-
-    projectButton.dataset.listID = a.id
-
-    console.log(projectList)
-    console.log(a.id)
-
-    sideControls.appendChild(projectButton)
-
-    
+function createTaskList(name, date, detail, projectId) {
+    return {id: Date.now().toString(), name: name, date: date, detail: detail, projectId: projectId}
 }
 
-function clearElement(element) {
-    while (element.firstChild) {
-        element.removeChild(element.firstChild)
-    }
+export default function saveAndRender() {
+    renderProject()
+    save()
+}
+
+function save() {
+    localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(projectList))
 }
 
 function renderProject() {
-    
-    projectHeading.innerHTML = `${project.name}`
-    
-    if (!hasTaskButton) {
-    const addTask = document.createElement('button')
-    addTask.classList.add('task-button')
-    addTask.innerHTML = "Add Task <img src='./img/icon/square-plus.svg' alt='' class='add-button-img' id='addIcon'>"
-
-    taskContainer.appendChild(addTask)
-
-    const addIcon = document.querySelector('#addIcon')
-    addIcon.src = addIconIM
-
-    hasTaskButton = true;
-
-    addTask.addEventListener('click', () => {
-        taskDialog.showModal()
-    })
+    const projectHeading = document.querySelector('#projectHeading')
+    clearElement(projectsDiv)
+    renderProjectButtons()
+    console.log(projectList)
+    const selectedProject = projectList.find(list => list.id === selectedListID)
+   
+    if (selectedProject) {
+        projectHeading.innerHTML = selectedProject.name
+        createTasks()
+    } else {
+        projectHeading.innerHTML = 'Add a project!'
     }
-
-    if (!project.tasks == null) {
-        const projectTaskDiv = document.createElement('div')
-        projectTaskDiv.classList.add('project-task')
-    
-        taskContainer.appendChild(projectTaskDiv)
-    }
-    
-    
+//    createTasks()
+   
     
     
 }
+
+function createTasks() {
+    const taskTitle = document.querySelector('#task-title')
+    const taskDetail = document.querySelector('#task-detail')
+    const taskDate = document.querySelector('#task-date')
+    const selectedProject = projectList.find(list => list.id === selectedListID)
+   
+    
+    if(selectedProject && taskTitle.value !== '') {
+        
+            const newTask = createTaskList(taskTitle.value, taskDate.value, taskDetail.value, selectedListID)
+            selectedProject.tasks.push(newTask)
+            addTaskToDom(newTask, selectedListID, selectedProject)
+        
+        
+    }
+  
+}
+
+function renderProjectButtons() {
+    projectList.forEach(button => {
+        
+        const projectButton = document.createElement('button')
+        projectButton.dataset.listID = button.id
+        projectButton.classList.add('project-buttons')
+        projectButton.innerHTML = button.name
+        if(button.id === selectedListID) {
+            projectButton.classList.add('active-project')
+        }
+        projectsDiv.appendChild(projectButton)
+    })
+}
+
+function clearElement(element) {
+while (element.firstChild) {
+    element.removeChild(element.firstChild)
+}
+}
+
+
+taskSubmitBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    createTasks()
+    taskForm.reset()
+    taskDialog.close()
+})
+
+taskCancelBtn.addEventListener('click', e => {
+    e.preventDefault()
+    taskDialog.close()
+})
+
+
+
+
 
 
 

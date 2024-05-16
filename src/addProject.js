@@ -1,22 +1,19 @@
 //imports
 
 import addIconIM from "./img/icon/square-plus.svg" 
-import addTaskToDom from "./addTask"
+
 
 //selectors
 
-const sideControls = document.querySelector('.side-controls')
-const mainInfoDiv = document.querySelector('.main-info')
-const taskContainer = document.querySelector('.task-container')
 
-const taskTitle = document.querySelector('#task-title')
-const taskDetail = document.querySelector('#task-detail')
-const taskDate = document.querySelector('#task-date')
+const taskContainer = document.querySelector('.task-container')
+const mainTaskContainer = document.querySelector('.main-info')
+const taskButtonContainer = document.querySelector('.task-button-container')
+
+
 
 const projectHeading = document.querySelector('#projectHeading')
-const taskButton = document.querySelector('.task-button')
-const taskSubmitBtn = document.querySelector('#taskSubmitBtn')
-const projectTask = document.querySelector('.project-task')
+
 
 const taskDialog = document.querySelector('#taskDialog')
 
@@ -24,20 +21,21 @@ const taskDialog = document.querySelector('#taskDialog')
 
 let hasTaskButton = false;
 
-let taskList  = []
+
 
 //functions
 
-export default function addProject(a) {
+export default function addProject(a, b) {
+    projectHeading.innerHTML = ''
     a.forEach (project => {
-        projectHeading.innerHTML = `${project.title}`
+        projectHeading.innerHTML = `${project.name}`
     
     if (!hasTaskButton) {
     const addTask = document.createElement('button')
     addTask.classList.add('task-button')
     addTask.innerHTML = "Add Task <img src='./img/icon/square-plus.svg' alt='' class='add-button-img' id='addIcon'>"
 
-    taskContainer.appendChild(addTask)
+    taskButtonContainer.appendChild(addTask)
 
     const addIcon = document.querySelector('#addIcon')
     addIcon.src = addIconIM
@@ -48,13 +46,15 @@ export default function addProject(a) {
         taskDialog.showModal()
     })
     }
+    // const hasNoTask = a.find(list => list.name == null)
+    // console.log(hasNoTask)
 
-    if (!project.tasks == null) {
-        const projectTaskDiv = document.createElement('div')
-        projectTaskDiv.classList.add('project-task')
+    // if (hasNoTask !== 'undefined') {
+    //     const projectTaskDiv = document.createElement('div')
+    //     projectTaskDiv.classList.add('project-task')
     
-        taskContainer.appendChild(projectTaskDiv)
-    }
+    //     taskContainer.appendChild(projectTaskDiv)
+    // }
     })
     
     
