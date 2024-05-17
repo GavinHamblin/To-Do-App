@@ -25,6 +25,7 @@ addProjectIcon.src = addIconIM
 const projectDialog = document.querySelector('#projectDialog')
 const taskDialog = document.querySelector('#taskDialog')
 const taskForm = document.querySelector('#taskForm')
+const projectForm = document.querySelector('#projectForm')
 
 const taskTitle = document.querySelector('#task-title')
 const taskDetail = document.querySelector('#task-detail')
@@ -53,9 +54,11 @@ const LOCAL_STORAGE_SELECTED_LIST_ID_KEY =   'project.selectedListId'
 
 let projectList = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || []
 
+let selectedListID = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY)
+
 let selectedProject = projectList.find(list => list.id === selectedListID) || null
 
-let selectedListID = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY)
+
 
 
 
@@ -66,7 +69,6 @@ projectsDiv.addEventListener('click', (e) => {
         projectHeading.innerHTML = e.target.innerHTML
         selectedListID = e.target.dataset.listID
         selectedProject = projectList.find(list => list.id === selectedListID)
-        localStorage.setItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY, selectedListID)
        
         clearElement(taskContainer)
         addProject(projectList)
@@ -77,10 +79,10 @@ projectsDiv.addEventListener('click', (e) => {
 })
 
 export function rebuildTasks() {
+    clearElement(taskContainer)
     selectedProject = projectList.find(list => list.id === selectedListID)
 
     if (selectedProject) {
-        console.log('Rebuilding tasks for project:', selectedProject);
         selectedProject.tasks.forEach(task => {
             addTaskToDom(task, selectedListID, selectedProject)
         })
@@ -98,7 +100,9 @@ projectSubmitBtn.addEventListener('click', e => {
     const newProject = createProjectList(projectName)
 
     projectList.push(newProject)
+    projectForm.reset()
     saveAndRender()
+   
     projectDialog.close()
 })
 
@@ -128,12 +132,14 @@ function renderProject() {
    
     if (selectedProject) {
         projectHeading.innerHTML = selectedProject.name
-        createTasks()
+        rebuildTasks()
     } else {
         projectHeading.innerHTML = 'Add a project!'
     }
 
 }
+
+
 
 
 
@@ -148,9 +154,11 @@ function createTasks() {
         
             const newTask = createTaskList(taskTitle.value, taskDate.value, taskDetail.value, selectedListID)
             selectedProject.tasks.push(newTask)
+            
             addTaskToDom(newTask, selectedListID, selectedProject)
+            saveAndRender()
         
-        
+            taskForm.reset()
     }
   
 }
@@ -187,6 +195,18 @@ taskCancelBtn.addEventListener('click', e => {
     e.preventDefault()
     taskDialog.close()
 })
+
+function initialize() {
+    if (projectList.length > 0) {
+        renderProjectButtons()
+        addProject(projectList)
+    }
+    renderProject()
+}
+
+initialize()
+saveAndRender()
+
 
 
 
