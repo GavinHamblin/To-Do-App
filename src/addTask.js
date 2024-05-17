@@ -1,6 +1,6 @@
 import closeIconIM from "./img/icon/close.svg" 
 import editIconIM from "./img/icon/edit.svg"
-import saveAndRender from "./index"
+import { saveAndRender, rebuildTasks, clearElement } from "./index"
 
 
 const mainInfoDiv = document.querySelector('.main-info')
@@ -29,8 +29,8 @@ export default function addTaskToDom(a, b, selectedProject) {
     const date = document.createElement('span')
     date.innerHTML = `Due: ${a.date}`
 
-    const editButton = document.createElement('img')
-    editButton.src = editIconIM
+    // const editButton = document.createElement('img')
+    // editButton.src = editIconIM
 
     const deleteButton = document.createElement('img')
     deleteButton.src = closeIconIM
@@ -63,17 +63,22 @@ export default function addTaskToDom(a, b, selectedProject) {
     mainTaskDiv.appendChild(taskTitle)
     mainTaskDiv.appendChild(notherDiv)
     notherDiv.appendChild(date)
-    notherDiv.appendChild(editButton)
+    // notherDiv.appendChild(editButton)
     notherDiv.appendChild(deleteButton)
     projectTaskDiv.appendChild(detail)
 
     
-    deleteButton.addEventListener('click', () => {
-        const taskIndex = selectedProject.tasks.findIndex(task => task.id === a.id)
+    deleteButton.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevents triggering the taskDiv click event
+        console.log('Tasks before deletion:', selectedProject.tasks);
+        const taskIndex = selectedProject.tasks.findIndex(task => task.id === a.id);
         if (taskIndex > -1) {
-            selectedProject.tasks.splice(taskIndex, 1)
-            saveAndRender()
-            rebuildTasks()
+            taskContainer.removeChild(projectTaskDiv)
+            selectedProject.tasks.splice(taskIndex, 1);
+            console.log('Tasks before deletion:', selectedProject.tasks);
+            saveAndRender();
+            clearElement(taskContainer)
+            rebuildTasks();
         }
         
        

@@ -48,33 +48,26 @@ const projectBtn = document.querySelectorAll('.project-buttons')
 
 
 const LOCAL_STORAGE_LIST_KEY = 'project.list'
-const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'project.selectedListId'
-// JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || 
+const LOCAL_STORAGE_SELECTED_LIST_ID_KEY =   'project.selectedListId'
 
-let projectList = []
 
-let selectedProject = null
+let projectList = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || []
+
+let selectedProject = projectList.find(list => list.id === selectedListID) || null
 
 let selectedListID = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY)
 
 
-function rebuildTasks() {
-    selectedProject = projectList.find(list => list.id === selectedListID)
-
-    if (selectedProject) {
-        selectedProject.tasks.forEach(task => {
-            addTaskToDom(task, selectedListID)
-        })
-    }
-}
 
 
 projectsDiv.addEventListener('click', (e) => {
-    console.log(projectList)
+ 
     if (e.target.tagName.toLowerCase() === 'button') {
         projectHeading.innerHTML = e.target.innerHTML
         selectedListID = e.target.dataset.listID
         selectedProject = projectList.find(list => list.id === selectedListID)
+        localStorage.setItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY, selectedListID)
+       
         clearElement(taskContainer)
         addProject(projectList)
         
@@ -83,6 +76,16 @@ projectsDiv.addEventListener('click', (e) => {
     }
 })
 
+export function rebuildTasks() {
+    selectedProject = projectList.find(list => list.id === selectedListID)
+
+    if (selectedProject) {
+        console.log('Rebuilding tasks for project:', selectedProject);
+        selectedProject.tasks.forEach(task => {
+            addTaskToDom(task, selectedListID, selectedProject)
+        })
+    }
+}
 
 addProjectBtn.addEventListener('click', () => {
     projectDialog.showModal()
@@ -107,20 +110,20 @@ function createTaskList(name, date, detail, projectId) {
     return {id: Date.now().toString(), name: name, date: date, detail: detail, projectId: projectId}
 }
 
-export default function saveAndRender() {
-    renderProject()
+export function saveAndRender() {
     save()
+    renderProject()
 }
 
 function save() {
     localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(projectList))
+    localStorage.setItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY, selectedListID)
 }
 
 function renderProject() {
     const projectHeading = document.querySelector('#projectHeading')
     clearElement(projectsDiv)
     renderProjectButtons()
-    console.log(projectList)
     const selectedProject = projectList.find(list => list.id === selectedListID)
    
     if (selectedProject) {
@@ -129,11 +132,10 @@ function renderProject() {
     } else {
         projectHeading.innerHTML = 'Add a project!'
     }
-//    createTasks()
-   
-    
-    
+
 }
+
+
 
 function createTasks() {
     const taskTitle = document.querySelector('#task-title')
@@ -167,7 +169,7 @@ function renderProjectButtons() {
     })
 }
 
-function clearElement(element) {
+export function clearElement(element) {
 while (element.firstChild) {
     element.removeChild(element.firstChild)
 }
